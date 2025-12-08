@@ -1,4 +1,7 @@
-// ==================== [Common Data & Utils] ====================
+// ==================== [1. Config & Data] ====================
+// GSAP 플러그인 등록
+gsap.registerPlugin(ScrollTrigger);
+
 const categories = ["교육/역량", "취업/창업", "금융/자산", "창업", "복지/건강", "참여/권리"];
 
 function generatePolicyData(count) {
@@ -9,7 +12,7 @@ function generatePolicyData(count) {
             id: i,
             category: randomCategory,
             title: `[${randomCategory}] 청년 정책 제목 ${i}`,
-            desc: "이 정책은 서울시 청년들을 위한 맞춤형 지원 사업입니다. 혜택을 놓치지 마세요. 이 정책은 특히 서울시 거주 청년들에게...",
+            desc: "이 정책은 서울시 청년들을 위한 맞춤형 지원 사업입니다. 혜택을 놓치지 마세요.",
             date: `2025.12.${String(Math.floor(Math.random() * 30) + 1).padStart(2, '0')} 마감`,
             image: `https://placehold.co/600x400/transparent/dddddd?text=Img+${i}`
         });
@@ -17,22 +20,18 @@ function generatePolicyData(count) {
     return data;
 }
 
-// Data Sets
 const tinderData = generatePolicyData(10);
 const allSlideData = generatePolicyData(30);
-const myLikedData = generatePolicyData(5); // 마이페이지용 더미 데이터
+const myLikedData = generatePolicyData(5);
 
-// Card HTML Generator
+// ==================== [2. UI Rendering Helpers] ====================
 function createCardHTML(item, isTinder = false) {
     const cardClass = isTinder ? 'policy-card tinder-card' : 'policy-card';
     const swipeIcons = isTinder ? `
         <div class="swipe-icon left"><i class="fa-solid fa-heart-crack"></i></div>
         <div class="swipe-icon right"><i class="fa-solid fa-heart"></i></div>
     ` : '';
-    
-    // Encode object to string for function argument
     const itemData = encodeURIComponent(JSON.stringify(item));
-    
     return `
         <div class="${cardClass}" data-id="${item.id}" onclick="openModal('${itemData}')">
             ${swipeIcons}
@@ -48,7 +47,7 @@ function createCardHTML(item, isTinder = false) {
     `;
 }
 
-// ==================== [Modal Logic (Common)] ====================
+// ==================== [3. Modal Logic] ====================
 const modal = document.getElementById('policy-modal');
 const modalTitle = document.getElementById('modal-title');
 const modalDesc = document.getElementById('modal-desc');
@@ -60,7 +59,6 @@ const modalHeartBtn = document.getElementById('modal-heart-btn');
 
 window.openModal = function(itemDataEncoded) {
     const item = JSON.parse(decodeURIComponent(itemDataEncoded));
-    
     if(modalTitle) modalTitle.innerText = item.title;
     if(modalDesc) modalDesc.innerText = item.desc;
     if(modalImg) modalImg.src = item.image;
@@ -71,7 +69,6 @@ window.openModal = function(itemDataEncoded) {
         modalHeartBtn.classList.remove('active');
         modalHeartBtn.innerHTML = '<i class="fa-regular fa-heart"></i>';
     }
-    
     if(modal) {
         modal.classList.remove('hidden');
         setTimeout(() => { modal.classList.add('active'); }, 10);
@@ -84,36 +81,11 @@ function closeModal() {
         setTimeout(() => { modal.classList.add('hidden'); }, 300);
     }
 }
-
 if(modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
 if(modal) modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
-if(modalHeartBtn) {
-    modalHeartBtn.addEventListener('click', () => {
-        modalHeartBtn.classList.toggle('active');
-        if(modalHeartBtn.classList.contains('active')) {
-            modalHeartBtn.innerHTML = '<i class="fa-solid fa-heart"></i>';
-        } else {
-            modalHeartBtn.innerHTML = '<i class="fa-regular fa-heart"></i>';
-        }
-    });
-}
-
-// ==================== [Main Page Logic] ====================
-// DOM 요소가 존재할 때만 실행 (mypage.html에서 에러 방지)
-const tinderList = document.getElementById('tinder-list');
-const slideRow1 = document.getElementById('slide-row-1');
-const slideRow2 = document.getElementById('slide-row-2');
-const searchInput = document.getElementById('search-input');
-const searchBtn = document.getElementById('search-btn');
-const resultMessage = document.getElementById('result-message');
-const btnSignup = document.getElementById('btn-signup');
-const btnShare = document.getElementById('btn-share');
-const signupModal = document.getElementById('signup-modal');
-const shareModal = document.getElementById('share-modal');
-const shareUrlInput = document.getElementById('share-url-input');
-
-// 1. Tinder Section Logic
+// ==================== [4. Page Specific Logic] ====================
+// --- Main Page Logic ---
 class CardSwiper {
     constructor(container, data) {
         this.container = container;
@@ -129,6 +101,15 @@ class CardSwiper {
         });
         this.cards = document.querySelectorAll('.tinder-card');
         this.setupEvents();
+        
+        // GSAP Animation for Tinder Cards (등장 효과)
+        gsap.from(".tinder-card", {
+            y: 100,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "back.out(1.7)"
+        });
     }
     setupEvents() { this.cards.forEach((card) => { this.addListeners(card); }); }
     addListeners(card) {
@@ -176,87 +157,185 @@ class CardSwiper {
     }
 }
 
-// 2. Marquee Slide Logic
 function renderSlide(data) {
+    const slideRow1 = document.getElementById('slide-row-1');
+    const slideRow2 = document.getElementById('slide-row-2');
     if(!slideRow1 || !slideRow2) return;
+    
     const row1Data = data.filter((_, i) => i % 2 === 0);
     const row2Data = data.filter((_, i) => i % 2 !== 0);
     const infiniteRow1 = [...row1Data, ...row1Data, ...row1Data];
     const infiniteRow2 = [...row2Data, ...row2Data, ...row2Data];
+    
     slideRow1.innerHTML = infiniteRow1.map(item => createCardHTML(item, false)).join('');
     slideRow2.innerHTML = infiniteRow2.map(item => createCardHTML(item, false)).join('');
+    
+    const resultMessage = document.getElementById('result-message');
     if(resultMessage) resultMessage.innerText = `추천 정책 (${data.length}건)`;
 }
 
-function handleSearch() {
-    if(!searchInput) return;
-    const keyword = searchInput.value.trim().toLowerCase();
-    if (keyword === "") { renderSlide(allSlideData); return; }
-    const filteredData = allSlideData.filter(item => item.title.toLowerCase().includes(keyword) || item.category.toLowerCase().includes(keyword));
-    renderSlide(filteredData);
-    if(resultMessage) resultMessage.innerText = `'${keyword}' 검색 결과 (${filteredData.length}건)`;
-}
-
-// 3. Signup & Share Modals (Main only)
-if(btnSignup) {
-    btnSignup.addEventListener('click', () => {
-        signupModal.classList.remove('hidden');
-        setTimeout(() => { signupModal.classList.add('active'); }, 10);
-    });
-    window.closeSignupModal = function() {
-        signupModal.classList.remove('active');
-        setTimeout(() => { signupModal.classList.add('hidden'); }, 300);
-    }
-    signupModal.addEventListener('click', (e) => { if (e.target === signupModal) closeSignupModal(); });
-}
-
-if(btnShare) {
-    btnShare.addEventListener('click', () => {
-        shareUrlInput.value = window.location.href;
-        shareModal.classList.remove('hidden');
-        setTimeout(() => { shareModal.classList.add('active'); }, 10);
-    });
-    window.closeShareModal = function() {
-        shareModal.classList.remove('active');
-        setTimeout(() => { shareModal.classList.add('hidden'); }, 300);
-    }
-    window.copyUrl = function() {
-        shareUrlInput.select();
-        shareUrlInput.setSelectionRange(0, 99999);
-        navigator.clipboard.writeText(shareUrlInput.value).then(() => {
-            alert("URL이 복사되었습니다!");
-            closeShareModal();
-        });
-    }
-    shareModal.addEventListener('click', (e) => { if (e.target === shareModal) closeShareModal(); });
-}
-
-// ==================== [My Page Logic] ====================
-const mypageList = document.getElementById('mypage-list');
-
+// --- My Page Logic ---
 function renderMyPage() {
+    const mypageList = document.getElementById('mypage-list');
     if(!mypageList) return;
     
     if(myLikedData.length === 0) {
-        mypageList.innerHTML = `
-            <div class="empty-state">
-                <i class="fa-regular fa-folder-open"></i>
-                <p>아직 찜한 정책이 없어요.</p>
-            </div>
-        `;
+        mypageList.innerHTML = `<div class="empty-state"><i class="fa-regular fa-folder-open"></i><p>아직 찜한 정책이 없어요.</p></div>`;
     } else {
         mypageList.innerHTML = myLikedData.map(item => createCardHTML(item, false)).join('');
+        
+        // GSAP for My Page Grid (순차 등장)
+        gsap.from(".policy-grid .policy-card", {
+            y: 50,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            scrollTrigger: {
+                trigger: ".policy-grid",
+                start: "top 80%"
+            }
+        });
+    }
+
+    // Chart.js Implementation
+    const ctx = document.getElementById('myChart');
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['금융/자산', '주거', '취업/창업', '복지', '교육', '참여'],
+                datasets: [{
+                    label: '나의 관심도',
+                    data: [85, 90, 70, 60, 40, 50],
+                    backgroundColor: 'rgba(244, 130, 69, 0.2)', // brand orange transparent
+                    borderColor: '#F48245',
+                    pointBackgroundColor: '#F48245',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: '#eee' },
+                        grid: { color: '#eee' },
+                        pointLabels: {
+                            font: { size: 12, family: 'Pretendard' },
+                            color: '#666'
+                        },
+                        ticks: { display: false, maxTicksLimit: 5 }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
     }
 }
 
-// ==================== [Initialization] ====================
+// ==================== [5. Initialization & New Tech] ====================
 document.addEventListener('DOMContentLoaded', () => {
-    // Run Main Page Logic if elements exist
+    // 1. Lenis Smooth Scroll Init
+    const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        direction: 'vertical',
+        gestureDirection: 'vertical',
+        smooth: true,
+        mouseMultiplier: 1,
+        smoothTouch: false,
+        touchMultiplier: 2,
+    });
+    function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // 2. GSAP Global Animations
+    // Header Text Animation (Main, MyPage, About 공통 적용)
+    gsap.from(".header-text h1", { y: 50, opacity: 0, duration: 1, ease: "power3.out" });
+    gsap.from(".header-text p", { y: 30, opacity: 0, duration: 1, delay: 0.3, ease: "power3.out" });
+    gsap.from(".header-image", { x: 50, opacity: 0, duration: 1, delay: 0.5, ease: "power3.out" });
+
+    // About Page Team Animation
+    if(document.querySelector('.team-card')) {
+        gsap.from(".team-card", {
+            y: 100,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            scrollTrigger: {
+                trigger: ".team-grid",
+                start: "top 80%"
+            }
+        });
+    }
+
+    // 3. Existing Logic Init
+    const tinderList = document.getElementById('tinder-list');
     if(tinderList) new CardSwiper(tinderList, tinderData);
-    if(slideRow1) renderSlide(allSlideData);
-    if(searchBtn) searchBtn.addEventListener('click', handleSearch);
-    if(searchInput) searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSearch(); });
     
-    // Run My Page Logic
-    if(mypageList) renderMyPage();
+    renderSlide(allSlideData);
+    
+    const searchBtn = document.getElementById('search-btn');
+    const searchInput = document.getElementById('search-input');
+    if(searchBtn && searchInput) {
+        const handleSearch = () => {
+            const keyword = searchInput.value.trim().toLowerCase();
+            if (keyword === "") { renderSlide(allSlideData); return; }
+            const filteredData = allSlideData.filter(item => 
+                item.title.toLowerCase().includes(keyword) || 
+                item.category.toLowerCase().includes(keyword)
+            );
+            renderSlide(filteredData);
+            const resultMessage = document.getElementById('result-message');
+            if(resultMessage) resultMessage.innerText = `'${keyword}' 검색 결과 (${filteredData.length}건)`;
+        };
+        searchBtn.addEventListener('click', handleSearch);
+        searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSearch(); });
+    }
+
+    renderMyPage();
+
+    // Modals (Signup/Share)
+    const btnSignup = document.getElementById('btn-signup');
+    const signupModal = document.getElementById('signup-modal');
+    if(btnSignup && signupModal) {
+        btnSignup.addEventListener('click', () => {
+            signupModal.classList.remove('hidden');
+            setTimeout(() => { signupModal.classList.add('active'); }, 10);
+        });
+        window.closeSignupModal = function() {
+            signupModal.classList.remove('active');
+            setTimeout(() => { signupModal.classList.add('hidden'); }, 300);
+        }
+        signupModal.addEventListener('click', (e) => { if (e.target === signupModal) closeSignupModal(); });
+    }
+
+    const btnShare = document.getElementById('btn-share');
+    const shareModal = document.getElementById('share-modal');
+    if(btnShare && shareModal) {
+        btnShare.addEventListener('click', () => {
+            const shareUrlInput = document.getElementById('share-url-input');
+            if(shareUrlInput) shareUrlInput.value = window.location.href;
+            shareModal.classList.remove('hidden');
+            setTimeout(() => { shareModal.classList.add('active'); }, 10);
+        });
+        window.closeShareModal = function() {
+            shareModal.classList.remove('active');
+            setTimeout(() => { shareModal.classList.add('hidden'); }, 300);
+        }
+        window.copyUrl = function() {
+            const shareUrlInput = document.getElementById('share-url-input');
+            shareUrlInput.select();
+            navigator.clipboard.writeText(shareUrlInput.value).then(() => {
+                alert("URL이 복사되었습니다!");
+                closeShareModal();
+            });
+        }
+        shareModal.addEventListener('click', (e) => { if (e.target === shareModal) closeShareModal(); });
+    }
 });

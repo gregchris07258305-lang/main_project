@@ -1,3 +1,18 @@
+
+/* ==================== Reset & Global ==================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    /* 기존 코드 유지하되, font-family가 명확히 선언되었는지 확인 */
+    font-family: "Pretendard", sans-serif;
+    line-height: 1.5;
+    background-color: var(--color-bg-light);
+    color: var(--color-text-main);
+    overflow-x: hidden;
+    min-width: var(--min-width);
+    overscroll-behavior-y: none;
+}
+
 /* ==================== Reset & Global ==================== */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
