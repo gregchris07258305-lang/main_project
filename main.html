@@ -8,7 +8,9 @@
 
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css">
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/variable/pretendardvariable.css" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -22,9 +24,9 @@
                         'bg-light': '#FFFFFF',
                         'text-main': '#000000',
                     },
-                    // [중요] Pretendard를 Tailwind 기본 폰트로 등록
+                    // [중요] Pretendard Variable을 우선순위로 설정
                     fontFamily: {
-                        sans: ['Pretendard', 'sans-serif'],
+                        sans: ['"Pretendard Variable"', 'Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', '"Helvetica Neue"', '"Segoe UI"', '"Apple SD Gothic Neo"', '"Noto Sans KR"', '"Malgun Gothic"', '"Apple Color Emoji"', '"Segoe UI Emoji"', '"Segoe UI Symbol"', 'sans-serif'],
                     }
                 }
             }
@@ -41,20 +43,35 @@
 
 <body class="font-sans antialiased">
 
-    <nav class="navigation">
-        <div class="nav-inner">
-            <a href="main.html" class="logo-area">
-                <img src="https://placehold.co/100x40/transparent/333?text=LOGO" alt="Logo" class="logo-img">
+    <nav
+        class="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/70 backdrop-blur-md transition-all duration-300">
+        <div class="mx-auto flex h-[80px] max-w-[1200px] items-center justify-between px-5">
+            <a href="main.html" class="flex items-center transition-opacity hover:opacity-80">
+                <img src="https://placehold.co/100x40/transparent/333?text=LOGO" alt="Logo" class="h-10 w-auto">
             </a>
 
-            <ul class="nav-pills">
-                <li class="nav-item home"><a href="main.html">Home</a></li>
-                <li class="nav-item mypage"><a href="mypage.html">My Page</a></li>
-                <li class="nav-item about"><a href="about.html">About</a></li>
+            <ul class="flex gap-3">
+                <li>
+                    <a href="main.html"
+                        class="flex items-center justify-center rounded-full px-5 py-2 text-[15px] font-bold text-white bg-primary-teal shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:bg-[#3d8b94]">
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="mypage.html"
+                        class="flex items-center justify-center rounded-full px-5 py-2 text-[15px] font-bold text-white bg-primary-orange shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:bg-[#e06d2e]">
+                        My Page
+                    </a>
+                </li>
+                <li>
+                    <a href="about.html"
+                        class="flex items-center justify-center rounded-full px-5 py-2 text-[15px] font-bold text-white bg-primary-beige shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:bg-[#c49f5b]">
+                        About
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
-
     <main class="body-container">
 
         <section class="header-section">

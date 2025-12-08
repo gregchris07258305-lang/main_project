@@ -26,6 +26,8 @@ const myLikedData = generatePolicyData(5);
 
 // ==================== [2. UI Rendering Helpers] ====================
 function createCardHTML(item, isTinder = false) {
+    // ailwind 클래스 추가: hover시 위로(-translate-y-2) 뜨고 그림자(shadow-xl) 강화
+    const hoverEffects = "transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl hover:bg-white group";
     const cardClass = isTinder ? 'policy-card tinder-card' : 'policy-card';
     const swipeIcons = isTinder ? `
         <div class="swipe-icon left"><i class="fa-solid fa-heart-crack"></i></div>
@@ -259,6 +261,16 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.from(".header-text h1", { y: 50, opacity: 0, duration: 1, ease: "power3.out" });
     gsap.from(".header-text p", { y: 30, opacity: 0, duration: 1, delay: 0.3, ease: "power3.out" });
     gsap.from(".header-image", { x: 50, opacity: 0, duration: 1, delay: 0.5, ease: "power3.out" });
+
+    // [추가할 코드] About 페이지 타이틀 애니메이션
+    if (document.querySelector('.about-title')) {
+        gsap.from(".about-title", {
+            y: 50,           // 아래로 50px 내려가 있다가 올라옴
+            opacity: 0,      // 투명 상태에서 시작
+            duration: 1,     // 1초 동안 재생
+            ease: "power3.out" // 부드러운 감속 효과
+        });
+    }
 
     // About Page Team Animation
     if(document.querySelector('.team-card')) {
