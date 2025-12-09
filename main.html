@@ -72,106 +72,110 @@
             </ul>
         </div>
     </nav>
-    <main class="body-container">
-    <section class="header-section">
-            <div class="w-full flex flex-col md:flex-row items-center justify-between gap-6 lg:gap-10 mb-10 pt-10">
-                
-                <div class="w-full md:w-[30%] text-center md:text-left order-1 shrink-0">
-                    <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
-                        쑥쑥 훑어보는<br>
-                        청년 정책 소식 📰
-                    </h1>
-                    <p class="text-gray-500 text-lg leading-relaxed break-keep">
-                        나에게 딱 맞는 정책을 쉽고 빠르게 찾아보세요.<br class="hidden md:block">
-                        매일 업데이트되는 새로운 소식을 놓치지 마세요!
+    <main class="relative body-container mypage-container max-w-[1200px] mx-auto px-5 py-10">
+        <section class="header-section">
+        <div class="w-full flex flex-col md:flex-row items-center justify-between gap-6 lg:gap-10 mb-12 pt-4">
+
+            <div class="w-full md:w-[30%] text-center md:text-left order-1 shrink-0 px-3 py-1 header-text">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
+                    쓱-쓱 훑어보는<br>
+                    청년 정책 소식 📰
+                </h1>
+                <p class="text-gray-500 text-lg leading-relaxed break-keep">
+                    나에게 딱 맞는 정책을 쉽고 빠르게 찾아보세요.<br class="hidden md:block">
+                    매일 업데이트되는 새로운 소식을 놓치지 마세요!
+                </p>
+            </div>
+
+            <div class="w-full md:w-[70%] flex justify-center md:justify-end relative order-2 header-image">
+                <div
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-orange-50 rounded-full blur-3xl -z-10 opacity-60">
+                </div>
+                <video autoplay muted loop playsinline poster="assets/header_poster.jpg"
+                    class="w-full max-w-full object-contain object-center md:object-right drop-shadow-md mask-image-gradient">
+                    <source src="assets/header_video.webm" type="video/webm">
+                    <source src="assets/header_video.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+
+        <div class="dvline">
+            <span class="dv-item">Static Bloom</span>
+            <span class="dv-item pink-bullet">2023</span>
+            <span class="dv-item pink-bullet">Hazy, melancholic</span>
+            <span class="dv-item pink-bullet long-text">For the light leaks and long silences</span>
+        </div>
+    </section>
+
+    <section class="tinder-section">
+        <div class="section-title">
+            <h2>지금 주목해야 할 정책 🔥</h2>
+            <p>카드를 좌우로 넘겨보세요 (스와이프)</p>
+        </div>
+        <div class="swiper-container">
+            <div class="card-stack" id="tinder-list">
+                <div class="no-more-cards">모든 카드를 확인했습니다! 🎉</div>
+            </div>
+
+            <div id="swipe-guide"
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none opacity-0 flex flex-col items-center justify-center gap-3">
+
+                <div
+                    class="w-20 h-20 bg-black/70 backdrop-blur-sm rounded-full flex items-center justify-center shadow-xl border border-white/10">
+                    <i class="fa-solid fa-hand-pointer text-3xl text-gray-200" id="hand-icon"></i>
+                </div>
+
+                <div class="px-4 py-2 bg-black/70 backdrop-blur-sm shadow-lg border border-white/10">
+                    <p class="text-sm font-bold text-gray-200 whitespace-nowrap">
+                        👉 오른쪽: 찜 ❤️ &nbsp;|&nbsp; 👈 왼쪽: 넘기기
                     </p>
                 </div>
-
-                <div class="w-full md:w-[70%] flex justify-center md:justify-end relative order-2">
-                    
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-orange-50 rounded-full blur-3xl -z-10 opacity-60"></div>
-                    
-                    <video autoplay muted loop playsinline 
-                           poster="assets/header_poster.jpg"
-                           class="w-full max-w-full object-contain object-center md:object-right drop-shadow-md mask-image-gradient">
-                        <source src="assets/header_video.webm" type="video/webm">
-                        <source src="assets/header_video.mp4" type="video/mp4">
-                    </video>
-                </div>
             </div>
 
-            <div class="dvline">
-                <span class="dv-item">Static Bloom</span>
-                <span class="dv-item pink-bullet">2023</span>
-                <span class="dv-item pink-bullet">Hazy, melancholic</span>
-                <span class="dv-item pink-bullet long-text">For the light leaks and long silences</span>
+        </div>
+    </section>
+  <section class="search-section">
+        <h2>관심있는 정책 키워드는<br>직접 찾아보세요!</h2>
+        <p>원하는 키워드로 정책을 검색해보세요.</p>
+        <div class="search-bar-container">
+            <div class="icon-area">
+                <i class="fa-solid fa-magnifying-glass"></i>
             </div>
-        </section>
+            <input type="text" id="search-input" placeholder="키워드를 입력해보세요 (예: 취업, 주거)">
+            <button id="search-btn">SEARCH</button>
+        </div>
+    </section>
 
-        <section class="tinder-section">
-            <div class="section-title">
-                <h2>지금 주목해야 할 정책 🔥</h2>
-                <p>카드를 좌우로 넘겨보세요 (스와이프)</p>
-            </div>
-            <div class="swiper-container">
-                <div class="card-stack" id="tinder-list">
-                    <div class="no-more-cards">모든 카드를 확인했습니다! 🎉</div>
-                </div>
-
-                <div id="swipe-guide" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none opacity-0 flex flex-col items-center justify-center gap-3">
-                    
-                    <div class="w-20 h-20 bg-black/70 backdrop-blur-sm rounded-full flex items-center justify-center shadow-xl border border-white/10">
-                        <i class="fa-solid fa-hand-pointer text-3xl text-gray-200" id="hand-icon"></i>
-                    </div>
-
-                    <div class="px-4 py-2 bg-black/70 backdrop-blur-sm shadow-lg border border-white/10">
-                        <p class="text-sm font-bold text-gray-200 whitespace-nowrap">
-                            👉 오른쪽: 찜 ❤️ &nbsp;|&nbsp; 👈 왼쪽: 넘기기
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <section class="search-section">
-            <h2>관심있는 정책 키워드는<br>직접 찾아보세요!</h2>
-            <p>원하는 키워드로 정책을 검색해보세요.</p>
-            <div class="search-bar-container">
-                <div class="icon-area">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </div>
-                <input type="text" id="search-input" placeholder="키워드를 입력해보세요 (예: 취업, 주거)">
-                <button id="search-btn">SEARCH</button>
-            </div>
-        </section>
-
-        <section class="slide-section">
-            <div class="section-header">
-                <h3 id="result-message">추천 정책 (30건)</h3>
-            </div>
-            <div class="marquee-wrapper">
+    <section class="slide-section">
+        <div class="section-header">
+            <h3 id="result-message">추천 정책 (30건)</h3>
+        </div>
+        
+        <div class="relative marquee-wrapper">
+            <div class="absolute top-0 left-0 h-full w-16 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+            <div class="absolute top-0 right-0 h-full w-16 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+  
                 <div class="marquee-row scroll-left" id="slide-row-1"></div>
                 <div class="marquee-row scroll-right" id="slide-row-2"></div>
+        </div>
+    </section>
+
+    <section class="membership-section">
+        <div class="membership-content">
+            <h2>나에게<br>정말 필요한 정책만<br>차곡차곡 쌓아 봐요!</h2>
+
+            <div class="membership-btns">
+                <button id="btn-signup" class="btn-primary-red">회원가입</button>
+                <button id="btn-share" class="btn-secondary-white">공유하기</button>
             </div>
-        </section>
 
-        <section class="membership-section">
-            <div class="membership-content">
-                <h2>나에게<br>정말 필요한 정책만<br>차곡차곡 쌓아 봐요!</h2>
-
-                <div class="membership-btns">
-                    <button id="btn-signup" class="btn-primary-red">회원가입</button>
-                    <button id="btn-share" class="btn-secondary-white">공유하기</button>
-                </div>
-
-                <div class="membership-img">
-                    <img src="assets/membership_image.png"
-                        onerror="this.src='https://placehold.co/400x300/transparent/orange?text=Login+Illustration'"
-                        alt="Membership Illustration">
-                </div>
+            <div class="membership-img">
+                <img src="assets/membership_image.png"
+                    onerror="this.src='https://placehold.co/400x300/transparent/orange?text=Login+Illustration'"
+                    alt="Membership Illustration">
             </div>
-        </section>
+        </div>
+    </section>
 
     </main>
 
@@ -237,7 +241,7 @@
             </div>
         </div>
     </div>
-
+</main>
     <script src="script.js"></script>
 </body>
 
