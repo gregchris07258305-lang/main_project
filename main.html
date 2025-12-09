@@ -73,16 +73,30 @@
         </div>
     </nav>
     <main class="body-container">
-
-        <section class="header-section">
-            <div class="header-content-wrapper">
-                <div class="header-text">
-                    <h1>쑥쑥 훑어보는<br>청년 정책 소식 📰</h1>
-                    <p>나에게 딱 맞는 정책을 쉽고 빠르게 찾아보세요.<br>매일 업데이트되는 새로운 소식을 놓치지 마세요!</p>
+    <section class="header-section">
+            <div class="w-full flex flex-col md:flex-row items-center justify-between gap-6 lg:gap-10 mb-10 pt-10">
+                
+                <div class="w-full md:w-[30%] text-center md:text-left order-1 shrink-0">
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
+                        쑥쑥 훑어보는<br>
+                        청년 정책 소식 📰
+                    </h1>
+                    <p class="text-gray-500 text-lg leading-relaxed break-keep">
+                        나에게 딱 맞는 정책을 쉽고 빠르게 찾아보세요.<br class="hidden md:block">
+                        매일 업데이트되는 새로운 소식을 놓치지 마세요!
+                    </p>
                 </div>
-                <div class="header-image">
-                    <img src="assets/header_image.png"
-                        onerror="this.src='https://placehold.co/500x400?text=Header+Image'" alt="Main Illustration">
+
+                <div class="w-full md:w-[70%] flex justify-center md:justify-end relative order-2">
+                    
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-orange-50 rounded-full blur-3xl -z-10 opacity-60"></div>
+                    
+                    <video autoplay muted loop playsinline 
+                           poster="assets/header_poster.jpg"
+                           class="w-full max-w-full object-contain object-center md:object-right drop-shadow-md mask-image-gradient">
+                        <source src="assets/header_video.webm" type="video/webm">
+                        <source src="assets/header_video.mp4" type="video/mp4">
+                    </video>
                 </div>
             </div>
 
@@ -103,6 +117,20 @@
                 <div class="card-stack" id="tinder-list">
                     <div class="no-more-cards">모든 카드를 확인했습니다! 🎉</div>
                 </div>
+
+                <div id="swipe-guide" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none opacity-0 flex flex-col items-center justify-center gap-3">
+                    
+                    <div class="w-20 h-20 bg-black/70 backdrop-blur-sm rounded-full flex items-center justify-center shadow-xl border border-white/10">
+                        <i class="fa-solid fa-hand-pointer text-3xl text-gray-200" id="hand-icon"></i>
+                    </div>
+
+                    <div class="px-4 py-2 bg-black/70 backdrop-blur-sm shadow-lg border border-white/10">
+                        <p class="text-sm font-bold text-gray-200 whitespace-nowrap">
+                            👉 오른쪽: 찜 ❤️ &nbsp;|&nbsp; 👈 왼쪽: 넘기기
+                        </p>
+                    </div>
+                </div>
+
             </div>
         </section>
 

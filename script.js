@@ -26,27 +26,72 @@ const myLikedData = generatePolicyData(5);
 
 // ==================== [2. UI Rendering Helpers] ====================
 function createCardHTML(item, isTinder = false) {
-    // ailwind 클래스 추가: hover시 위로(-translate-y-2) 뜨고 그림자(shadow-xl) 강화
-    const hoverEffects = "transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl hover:bg-white group";
-    const cardClass = isTinder ? 'policy-card tinder-card' : 'policy-card';
-    const swipeIcons = isTinder ? `
-        <div class="swipe-icon left"><i class="fa-solid fa-heart-crack"></i></div>
-        <div class="swipe-icon right"><i class="fa-solid fa-heart"></i></div>
-    ` : '';
-    const itemData = encodeURIComponent(JSON.stringify(item));
-    return `
-        <div class="${cardClass}" data-id="${item.id}" onclick="openModal('${itemData}')">
-            ${swipeIcons}
-            <div class="card-image">
-                <img src="${item.image}" alt="${item.title}">
+    const isMobile = window.innerWidth <= 768; // 모바일 체크
+
+    // [Tinder 카드일 때]
+    if (isTinder) {
+        // 1. 카드 전체 스타일 (기존과 동일하지만 크기 대응)
+        const cardClass = 'policy-card tinder-card absolute top-0 left-0 w-full h-full flex flex-col bg-white overflow-hidden shadow-xl rounded-[30px] cursor-grab';
+        
+        const swipeIcons = `
+            <div class="swipe-icon left absolute top-1/2 -translate-y-1/2 -left-[100px] w-24 h-24 bg-white rounded-full flex justify-center items-center shadow-lg text-primary-teal z-20 opacity-0 transition-opacity"><i class="fa-solid fa-heart text-4xl"></i></div>
+            <div class="swipe-icon right absolute top-1/2 -translate-y-1/2 -right-[100px] w-24 h-24 bg-white rounded-full flex justify-center items-center shadow-lg text-primary-red z-20 opacity-0 transition-opacity"><i class="fa-solid fa-xmark text-4xl"></i></div>
+        `;
+        const itemData = encodeURIComponent(JSON.stringify(item));
+
+        return `
+            <div class="${cardClass}" data-id="${item.id}" onclick="openModal('${itemData}')">
+                ${swipeIcons}
+                
+                <div class="card-image w-full h-[320px] bg-gray-50 relative shrink-0">
+                    <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover pointer-events-none">
+                    <div class="absolute bottom-0 w-full h-20 bg-gradient-to-t from-white to-transparent"></div>
+                </div>
+
+                <div class="card-content flex flex-col justify-between flex-grow p-8 text-left bg-white relative z-10">
+                    <div>
+                        <span class="inline-block py-1 px-3 rounded-full bg-orange-50 text-primary-orange text-sm font-bold mb-3 border border-orange-100">
+                            ${item.category}
+                        </span>
+                        <h3 class="card-title text-2xl font-extrabold text-gray-900 leading-tight mb-3 line-clamp-2">
+                            ${item.title}
+                        </h3>
+                        <p class="card-desc text-base text-gray-500 font-medium line-clamp-3 leading-relaxed">
+                            ${item.desc}
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
+                        <span class="card-date text-sm text-gray-400 font-bold"><i class="fa-regular fa-clock mr-1"></i> ${item.date}</span>
+                        <button class="text-sm font-bold text-gray-900 underline decoration-gray-300 underline-offset-4">자세히 보기</button>
+                    </div>
+                </div>
             </div>
-            <div class="card-content">
-                <h3 class="card-title">${item.title}</h3>
-                <p class="card-desc">${item.desc}</p>
-                <span class="card-date">${item.date}</span>
+        `;
+    } 
+    
+    // [일반 카드일 때 (My Page, Slide 등)] - 기존 유지
+    else {
+        const hoverEffects = "transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl hover:bg-white group";
+        const baseClass = 'policy-card relative flex flex-col overflow-hidden rounded-[20px] bg-[#F6F6F7] shadow-sm cursor-pointer';
+        const cardClass = `${baseClass} ${hoverEffects}`;
+        const itemData = encodeURIComponent(JSON.stringify(item));
+        
+        return `
+            <div class="${cardClass}" data-id="${item.id}" onclick="openModal('${itemData}')">
+                <div class="card-image w-full h-[180px] flex items-end justify-center overflow-hidden bg-white">
+                    <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                </div>
+                <div class="card-content p-6 flex flex-col gap-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-primary-orange bg-orange-50 px-2 py-1 rounded-md">${item.category}</span>
+                    </div>
+                    <h3 class="card-title text-xl font-extrabold text-[#222] line-clamp-2">${item.title}</h3>
+                    <p class="card-desc text-sm text-[#666] font-medium line-clamp-2">${item.desc}</p>
+                    <span class="card-date text-xs text-[#888] mt-2">${item.date}</span>
+                </div>
             </div>
-        </div>
-    `;
+        `;
+    }
 }
 
 // ==================== [3. Modal Logic] ====================
@@ -289,7 +334,63 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Existing Logic Init
     const tinderList = document.getElementById('tinder-list');
     if(tinderList) new CardSwiper(tinderList, tinderData);
+    const guideEl = document.getElementById('swipe-guide');
+    const handIcon = document.getElementById('hand-icon');
     
+    if (guideEl && handIcon) {
+        // 1. 애니메이션 정의 (왼쪽 -> 오른쪽 스와이프 모션)
+        const tl = gsap.timeline({ 
+            paused: true, // 스크롤 도달 전까지 멈춤
+            onComplete: () => {
+                // 3회 반복 후 자연스럽게 사라짐
+                gsap.to(guideEl, { opacity: 0, duration: 0.5 });
+            }
+        });
+
+        tl.fromTo(guideEl, 
+            { opacity: 0, x: -30, rotation: -10 }, // 시작: 약간 왼쪽, 투명, 살짝 회전
+            { opacity: 1, x: 0, rotation: 0, duration: 0.5, ease: "power2.out" } // 등장
+        )
+        .to(handIcon, { 
+            x: 40,      // 오른쪽으로 밈
+            rotation: 15, // 손목 회전 효과
+            duration: 0.8, 
+            ease: "power1.inOut" 
+        })
+        .to(guideEl, { 
+            opacity: 0, // 끝날 때 투명해짐
+            x: 20, 
+            duration: 0.3 
+        }, "+=0.1"); // 약간 대기 후 사라짐
+
+        // 2. 스크롤 트리거: 틴더 섹션이 화면에 보이면 재생
+        ScrollTrigger.create({
+            trigger: ".tinder-section",
+            start: "top 60%", // 섹션이 화면 중간쯤 왔을 때
+            onEnter: () => {
+                // 사용자가 아직 액션을 안 했다면 재생
+                if (guideEl.style.display !== 'none') {
+                    tl.play();
+                }
+            },
+            once: true // 한 번만 실행 (스크롤 왔다갔다 해도 다시 안 뜸)
+        });
+
+        // 3. 사용자 액션 감지: 클릭/터치 시 즉시 숨김
+        const hideGuide = () => {
+            tl.kill(); // 애니메이션 중단
+            gsap.to(guideEl, { opacity: 0, duration: 0.3, onComplete: () => {
+                guideEl.style.display = 'none'; // 완전히 제거
+            }});
+        };
+
+        // 카드를 누르거나 스와이프 시도하면 가이드 삭제
+        if (tinderList) {
+            tinderList.addEventListener('mousedown', hideGuide);
+            tinderList.addEventListener('touchstart', hideGuide);
+        }
+    }
+
     renderSlide(allSlideData);
     
     const searchBtn = document.getElementById('search-btn');
@@ -309,6 +410,8 @@ document.addEventListener('DOMContentLoaded', () => {
         searchBtn.addEventListener('click', handleSearch);
         searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSearch(); });
     }
+
+    
 
     renderMyPage();
 

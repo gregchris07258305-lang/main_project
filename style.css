@@ -38,6 +38,7 @@ img { max-width: 100%; display: block; object-fit: cover; }
 }
 
 /* ==================== Navigation ==================== */
+/* Tailwind CSS 적용으로 인해 기존 CSS는 주석 처리됨 */
 /*.navigation { width: 100%; height: var(--nav-height); background-color: #fff; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #eee; display: flex; justify-content: center; }
 .nav-inner { width: 100%; max-width: var(--max-width); padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
 .logo-area { display: flex; align-items: center; }*/
@@ -50,8 +51,7 @@ img { max-width: 100%; display: block; object-fit: cover; }
 .nav-item.about a { background-color: var(--color-primary-beige); }
 
 /* ==================== Header & Common Layout ==================== */
-/* [수정] 폰트 크기(font-size)에도 !important를 붙여서 Tailwind 리셋 방지 */
-
+/* Tailwind 리셋 방지를 위해 !important 사용 */
 h1 { 
     font-size: var(--font-h1) !important; 
     font-weight: 800 !important; 
@@ -106,13 +106,51 @@ p {
 .dv-item { display: flex; align-items: center; }
 .pink-bullet::before { content: ''; display: inline-block; width: 10px; height: 10px; background-color: #FFC0CB; margin-right: 8px; border-radius: 2px; }
 
-/* ==================== Main Page Specific ==================== */
+/* ==================== Main Page Specific (Tinder Section) ==================== */
 .tinder-section .section-title { margin-bottom: 40px; text-align: center;}
-.swiper-container { width: 100%; height: 400px; position: relative; display: flex; justify-content: center; overflow: visible; }
-.card-stack { width: 320px; height: 100%; position: relative; }
+
+/* [수정] 컨테이너 높이 확대 (카드 회전 고려) */
+.swiper-container { 
+    width: 100%; 
+    height: 650px; 
+    position: relative; 
+    display: flex; 
+    justify-content: center; 
+    overflow: visible; 
+    padding-top: 20px;
+}
+
+/* [수정] 카드 스택 크기 확대 (400x600) */
+.card-stack { 
+    width: 400px; 
+    height: 600px; 
+    position: relative; 
+    max-width: 90vw; 
+}
+
 .policy-card { background-color: var(--color-card-news); border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; display: flex; flex-direction: column; border: none; cursor: pointer; }
-.tinder-card { width: 100%; height: 100%; position: absolute; top: 0; left: 0; background-color: var(--color-card-news); border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: grab; user-select: none; touch-action: none; display: flex; flex-direction: column; will-change: transform, opacity; transform-origin: 50% 100%; overflow: visible; }
+
+/* [수정] 틴더 카드 스타일 (라운딩, 그림자 강화) */
+.tinder-card { 
+    width: 100%; 
+    height: 100%; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    background-color: var(--color-card-news); 
+    border-radius: 30px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+    cursor: grab; 
+    user-select: none; 
+    touch-action: none; 
+    display: flex; 
+    flex-direction: column; 
+    will-change: transform, opacity; 
+    transform-origin: 50% 100%; 
+    overflow: hidden; 
+}
 .tinder-card:active { cursor: grabbing; }
+
 .swipe-icon { position: absolute; top: 50%; transform: translateY(-50%); width: 80px; height: 80px; background-color: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); opacity: 0; transition: opacity 0.2s ease; z-index: 10; }
 .swipe-icon i { font-size: 40px; }
 .swipe-icon.left { left: -100px; color: var(--color-primary-teal); }
@@ -158,16 +196,11 @@ p {
 .mypage-container { padding-top: 40px; padding-bottom: 40px; display: flex; flex-direction: column; gap: 60px; }
 .header2-style { margin-bottom: 60px; border-bottom: none; }
 .header2-style h1 { font-size: 42px; }
-/*.analysis-wrapper { display: flex; gap: 30px; margin-bottom: 60px; align-items: stretch; }
-.analysis-section { flex: 1; background-color: #fff; border-radius: 20px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center; transition: transform 0.2s ease; }*/
 .analysis-section:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
 .analysis-text { margin-bottom: 20px; }
 .analysis-text h2 { font-size: 24px; margin-bottom: 8px; color: #333; }
 .analysis-text p { font-size: 15px; color: #777; word-break: keep-all; }
-/*.analysis-image { width: 100%; max-width: 400px; display: flex; justify-content: center; align-items: center; overflow: hidden; border-radius: 12px; }*/
 .analysis-image img { width: 100%; height: auto; object-fit: contain; }
-/*.profile-section { display: flex; gap: 40px; align-items: stretch; justify-content: space-between; }
-.profile-card { flex: 1.5; background-color: #fff; border-radius: 20px; padding: 30px; display: flex; align-items: center; gap: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }*/
 .profile-image img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--color-primary-orange); }
 .profile-info h2 { font-size: 24px; margin-bottom: 5px; }
 .profile-email { color: #888; margin-bottom: 15px; }
@@ -175,8 +208,6 @@ p {
 .profile-tags span { background-color: var(--color-card-news); color: #555; padding: 4px 12px; border-radius: 15px; font-size: 13px; font-weight: 600; }
 .btn-edit-profile { padding: 8px 16px; border: 1px solid #ddd; background: #fff; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s; }
 .btn-edit-profile:hover { background-color: #f9f9f9; border-color: #bbb; }
-/*.dashboard-stats { flex: 1; display: flex; justify-content: space-between; gap: 20px; }
-.stat-item { flex: 1; background-color: #fff; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }*/
 .stat-label { font-size: 14px; color: #888; margin-bottom: 10px; }
 .stat-value { font-size: 32px; font-weight: 800; }
 .text-red { color: var(--color-primary-red); }
@@ -192,8 +223,23 @@ p {
 /* ==================== Modal (Common) ==================== */
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 2000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
 .modal-overlay.active { opacity: 1; pointer-events: auto; }
-.modal-content { background-color: #fff; width: 90%; max-width: 500px; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.3); transform: translateY(20px); transition: transform 0.3s ease; display: flex; flex-direction: column; }
+
+/* [수정] 모달 콘텐츠: 너비 줄이고 높이 유동적 (카드 비율 대응) */
+.modal-content { 
+    background-color: #fff; 
+    width: 90%; 
+    max-width: 450px; 
+    max-height: 85vh; 
+    overflow-y: auto;
+    border-radius: 30px; 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3); 
+    transform: translateY(20px); 
+    transition: transform 0.3s ease; 
+    display: flex; 
+    flex-direction: column; 
+}
 .modal-overlay.active .modal-content { transform: translateY(0); }
+
 .small-modal { max-width: 400px; }
 .modal-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
 .modal-header h3 { font-size: 18px; font-weight: 800; margin: 0; }
@@ -205,12 +251,27 @@ p {
 .url-box { display: flex; gap: 10px; }
 #share-url-input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9; color: #666; font-size: 14px; }
 .copy-btn { padding: 0 20px; border: none; background: #333; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; }
-.modal-image { width: 100%; height: 250px; background-color: var(--color-card-news); position: relative; display: flex; justify-content: center; align-items: center; }
-.modal-image img { width: 100%; height: 100%; object-fit: contain; }
+
+/* [수정] 모달 이미지 높이 확대 */
+.modal-image { 
+    width: 100%; 
+    height: 350px; 
+    background-color: var(--color-card-news); 
+    position: relative; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+.modal-image img { width: 100%; height: 100%; object-fit: cover; }
+
 .modal-tag { position: absolute; top: 20px; left: 20px; background-color: rgba(0,0,0,0.7); color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; }
+
 .modal-body { padding: 30px; display: flex; flex-direction: column; gap: 15px; }
-#modal-title { font-size: 24px; font-weight: 800; line-height: 1.3; margin-bottom: 0;}
-#modal-desc { color: #555; font-size: 16px; line-height: 1.6; }
+
+/* [수정] 모달 타이틀/본문 폰트 키움 */
+#modal-title { font-size: 28px; font-weight: 800; line-height: 1.3; margin-bottom: 0;}
+#modal-desc { color: #444; font-size: 17px; line-height: 1.6; }
+
 .modal-actions { margin-top: 20px; display: flex; gap: 15px; justify-content: space-between; }
 .action-btn { padding: 12px 20px; border-radius: 50px; border: none; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
 .back-btn { flex: 1; background-color: #eee; color: #333; }
@@ -279,25 +340,18 @@ p {
     .team-info p { font-size: 12px; }
 }
 
-/* ==================== Custom Effects ==================== */
+/* ==================== Custom Effects (Aurora & Mask) ==================== */
 
-/* 1. 애니메이션 동작 정의 (배경 위치를 대각선으로 천천히 이동) */
+/* 1. 애니메이션 동작 정의 */
 @keyframes aurora-shift {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
-/* 2. 오로라 배경 클래스 정의 */
-@keyframes aurora-shift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
+/* 2. 오로라 배경 (Green & Purple ver) */
 .bg-aurora {
     /* 요청하신 초록(Green) & 보라(Purple) 위주의 신비로운 그라디언트 */
-    /* 딥 바이올렛 -> 에메랄드 그린 -> 스카이 블루 -> 미드나잇 퍼플 */
     background: linear-gradient(-45deg, #4c1d95, #059669, #0ea5e9, #2e1065);
     background-size: 400% 400%;
     animation: aurora-shift 15s ease infinite;
@@ -309,7 +363,19 @@ p {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
     background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-    opacity: 0.15; /* 노이즈 살짝 줄임 */
+    opacity: 0.15;
     mix-blend-mode: overlay;
     pointer-events: none;
+}
+
+/* 3. 비디오 마스크 (투명 그라데이션) */
+.mask-image-gradient {
+    /* 중앙은 선명하게, 가장자리는 투명하게 */
+    -webkit-mask-image: radial-gradient(circle at center, black 50%, transparent 95%);
+    mask-image: radial-gradient(circle at center, black 50%, transparent 95%);
+    
+    /* 그림자/테두리 제거 */
+    box-shadow: none !important; 
+    border: none !important;
+    border-radius: 0; 
 }
